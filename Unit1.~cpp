@@ -1,0 +1,125 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit1.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm1 *Form1;
+
+int x = 5; // pilka bedzie sie poruszac w lewo
+int y = 5;  // pilka bedzie sie poruszac w gore o 8 pikseli
+int bounces = 0; // ilosc odbic pi³ki
+
+//---------------------------------------------------------------------------
+__fastcall TForm1::TForm1(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::TimerBallTimer(TObject *Sender)
+{
+
+  // if ( ball->Left + x > tlo->Left) x *= -1;
+  // if ( ball->Top +x > tlo->Top) x *= -1;
+
+   ball->Left += x;   //przesuniêcie pi³ki
+   ball->Top += y;
+
+   //odbij od górnej sciany
+   if ( ball->Top-5 <= tlo->Top) y = -y;
+
+   //odbij od dolnej sciany
+  if ( ball->Top + ball->Height-5 >= tlo->Height ) y = -y;
+
+  // skucie
+   if (( ball->Left <= paddleLeft->Left  &&
+        ( ball->Top + ball->Height/2 < paddleLeft->Top || ball->Top + ball->Height/2 > paddleLeft->Top + paddleLeft->Height)) ||
+        (ball->Left + ball->Width > paddleRight->Left + paddleRight->Width &&
+        (ball->Top + ball->Height/2 < paddleRight->Top || ball->Top + ball->Height/2 > paddleRight->Top + paddleRight->Height)))
+  {
+    TimerBall->Enabled = false;
+    ball->Visible = false;
+  }
+  // odbicie od lewej paletki
+  else if (ball->Left <= paddleLeft->Left + paddleLeft->Width &&  ball->Top + ball->Height/2 <= paddleLeft->Top + paddleLeft->Height &&
+           ball->Top + ball->Height/2 >= paddleLeft->Top)
+        {
+          x = 1.05*x;
+          bounces++;
+
+                        //Strefa górna
+                        if (ball->Left <= paddleLeft->Left + paddleLeft->Width && ball->Top + ball->Height/2 < paddleLeft->Top + paddleLeft->Height/3 &&
+                        ball->Top + ball->Height/2 >= paddleLeft->Top)
+                        {
+                                x = -0.8*x;
+                                y = 0.8*y;
+                        }
+
+                        //strefa srodkowa
+                        else if (ball->Left <= paddleLeft->Left + paddleLeft->Width && ball->Top + ball->Height/2 <= paddleLeft->Top + 2/3*paddleLeft->Height &&
+                        ball->Top + ball->Height/2 >= paddleLeft->Top + paddleLeft->Height/3)
+                        {
+                                x = - x;
+                        }
+                        //strefa dolne
+                        else if (ball->Left <= paddleLeft->Left + paddleLeft->Width && ball->Top + ball->Height/2 <= paddleLeft->Top + paddleLeft->Height &&
+                        ball->Top + ball->Height/2 > paddleLeft->Top + 2/3*paddleLeft->Height)
+                        {
+                                x = -1.2*x;
+                                y = 1.2*y;
+                }
+
+         }
+         // odbicie od prawej paletki
+else if (ball->Left + ball->Width >= paddleRight->Left  &&
+           ball->Top + ball->Height/2 <= paddleRight->Top + paddleRight->Height &&
+           ball->Top + ball->Height/2 >= paddleRight->Top)
+        {
+         x = -x;
+        }
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::paddleLeftUpTimer(TObject *Sender)
+{
+    if ( paddleLeft->Top > 10) paddleLeft->Top -= 10;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::paddleLeftDownTimer(TObject *Sender)
+{
+   if ( paddleLeft->Top + paddleLeft->Height < tlo->Height-10) paddleLeft->Top += 10;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::paddleRightUpTimer(TObject *Sender)
+{
+     if ( paddleRight->Top > 10)  paddleRight->Top -= 10;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::paddleRightDownTimer(TObject *Sender)
+{
+     if ( paddleRight->Top + paddleRight->Height < tlo->Height-10) paddleRight->Top += 10;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+    if (Key == VK_UP) paddleRightUp->Enabled = true;
+    if (Key == VK_DOWN) paddleRightDown->Enabled = true;
+    if (Key == 'A') paddleLeftUp->Enabled = true;
+    if (Key == 'Z') paddleLeftDown->Enabled = true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+    if (Key == VK_UP) paddleRightUp->Enabled = false;
+    if (Key == VK_DOWN) paddleRightDown->Enabled = false;
+    if (Key == 'A') paddleLeftUp->Enabled = false;
+    if (Key == 'Z') paddleLeftDown->Enabled = false;
+}
+//---------------------------------------------------------------------------
+
