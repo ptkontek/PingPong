@@ -13,6 +13,8 @@ object Form1: TForm1
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  OnClose = FormClose
+  OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
   DesignSize = (
@@ -869,13 +871,6 @@ object Form1: TForm1
     TabOrder = 1
     Visible = False
     OnClick = ButtomNextLevelClick
-  end
-  object MediaPlayer1: TMediaPlayer
-    Left = 160
-    Top = 400
-    Width = 253
-    Height = 30
-    TabOrder = 2
   end
   object TimerBall: TTimer
     Enabled = False

@@ -90,38 +90,38 @@ void __fastcall TForm1::TimerBallTimer(TObject *Sender)
         {
             TimerBall->Enabled = false;
             ball->Visible = false;
-            sndPlaySound("snd/koniec/wav",SND_ASUNC);
+            sndPlaySound("snd/koniec.wav",SND_ASYNC);
             whoWon();
         }
   // odbicie od lewej paletki
-   else if (ball->Left <= paddleLeft->Left + paddleLeft->Width &&  ball->Top + ball->Height/2 <= paddleLeft->Top + paddleLeft->Height &&
+   else if (ball->Left < paddleLeft->Left + paddleLeft->Width && ball->Top + ball->Height/2 <= paddleLeft->Top + paddleLeft->Height &&
            ball->Top + ball->Height/2 >= paddleLeft->Top)
         {
-          sndPlaySound("snd/odcibie/wav",SND_ASUNC);
+          sndPlaySound("snd/odbicie.wav",SND_ASYNC);
           bounces++;
           whichPlayer = "left";
             //srodek paletki - pilka przyspiesza
-               if (ball->Left <= paddleLeft->Left + paddleLeft->Width && ball->Top + ball->Height/2 <= paddleLeft->Top + 2/3*paddleLeft->Height &&
+               if (ball->Left <= paddleLeft->Left + paddleLeft->Width && ball->Top + ball->Height/2 <= paddleLeft->Top + 2 * paddleLeft->Height/3 &&
                         ball->Top + ball->Height/2 >= paddleLeft->Top + paddleLeft->Height/3)
                   {
                      x = -1.4*x;
                      y = 1.1*y;
-                  } else x = -1.1*x;
+                  } else x = -1.2*x;
         }
                         // odbicie od prawej paletki
    else if (ball->Left + ball->Width >= paddleRight->Left  && ball->Top + ball->Height/2 <= paddleRight->Top + paddleRight->Height &&
            ball->Top + ball->Height/2 >= paddleRight->Top)
         {
-         sndPlaySound("snd/odcibie/wav",SND_ASUNC);
+         sndPlaySound("snd/odbicie.wav",SND_ASYNC);
          bounces++;
          whichPlayer = "right";
                          //srodek paletki - pilka przyspiesza
-               if (ball->Left <= paddleRight->Left + paddleRight->Width && ball->Top + ball->Height/2 <= paddleRight->Top + paddleRight->Height &&
-                        ball->Top + ball->Height/2 >= paddleRight->Top + 2/3*paddleRight->Height)
+               if (ball->Left <= paddleRight->Left + paddleRight->Width && ball->Top + ball->Height/2 <= paddleRight->Top + 2 * paddleRight->Height/3 &&
+                        ball->Top + ball->Height/2 >= paddleRight->Top + paddleRight->Height/3)
                   {
                       x = -1.4*x;
                       y = 1.1*y;
-                  } else  x = -1.1*x;
+                  } else  x = -1.2*x;
         }
 }
 //---------------------------------------------------------------------------
@@ -165,6 +165,13 @@ void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
 //---------------------------------------------------------------------------
 void __fastcall TForm1::ButtomNewGameClick(TObject *Sender)
 {
+
+
+
+     if (level > 1){
+     if (Application->MessageBox("Czy na pewno chcesz rozpocz¹æ now¹ grê?","PotwierdŸ",
+      MB_YESNO | MB_ICONQUESTION) == IDYES){
+
      settingParameters() ;
      leftPlayerPoints = 0;
      rightPlayerPoints = 0;
@@ -180,12 +187,27 @@ void __fastcall TForm1::ButtomNewGameClick(TObject *Sender)
      LabelPoints->Visible = false;
      LabelBounces->Visible = false;
      LabelLevel->Visible = false;
+     }
+     }   else if (level = 1){
 
+     settingParameters() ;
+     leftPlayerPoints = 0;
+     rightPlayerPoints = 0;
+     level = 1;
+     bounces = 0;
 
+     TimerBall->Enabled = true;
+     ball->Visible = true;
 
+     Start->Visible = false;
+     ButtomNewGame->Visible = false;
+     ButtomNextLevel->Visible = false;
+     LabelPoints->Visible = false;
+     LabelBounces->Visible = false;
+     LabelLevel->Visible = false;
+     }
 }
 //---------------------------------------------------------------------------
-
 
 void __fastcall TForm1::ButtomNextLevelClick(TObject *Sender)
 {
@@ -205,6 +227,30 @@ void __fastcall TForm1::ButtomNextLevelClick(TObject *Sender)
      LabelLevel->Visible = false;
 
 
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::FormCreate(TObject *Sender)
+{
+      ShowMessage("Witaj w grze PingPong.\n\n"
+                  "Lewy gracz steruje wciskaj¹c klawisze A oraz Z.\n"
+                  "Prawy gracz steruje wciskaj¹c strza³ki do góry i w dó³.\n\n"
+                  "Dla urozmaicenia zabawy:\n"
+                  "Kiedy odbijesz pi³kê na œrodku paletki zmienisz jej k¹t odcicia i pi³ka przyœpieszy.\n"
+                  "Im d³u¿ej odbijasz, tym pi³ka szybciej przemieszcza siê.\n"
+                  "Mo¿esz dowolnie zmieniaæ pole gry.\n"
+                  "Nastêpn¹ rundê rozpoczyna gracz zdobywaj¹cy punkt.\n"
+
+      );
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
+{
+     if (Application->MessageBox("Czy na pewno chcesz zakoñczyæ grê?","PotwierdŸ",
+      MB_YESNO | MB_ICONQUESTION) == IDYES)
+      Action = caFree;
+     else Action = caNone;
 }
 //---------------------------------------------------------------------------
 

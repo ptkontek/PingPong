@@ -20,7 +20,7 @@
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="ilink32"/>
     <USERDEFINES value="_DEBUG"/>
-    <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
+    <SYSDEFINES value="NO_STRICT;_RTLDLL;USEPACKAGES"/>
     <MAINSOURCE value="Project1.cpp"/>
     <INCLUDEPATH value="&quot;C:\Program Files (x86)\Borland\CBuilder6\Projects&quot;;&quot;C:\Users\HP\Documents\C++\!_C++ OBIEKTOWY\C++ OKIENKOWY\PingPong&quot;;$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="&quot;C:\Program Files (x86)\Borland\CBuilder6\Projects&quot;;&quot;C:\Users\HP\Documents\C++\!_C++ OBIEKTOWY\C++ OKIENKOWY\PingPong&quot;;$(BCB)\lib\obj;$(BCB)\lib"/>

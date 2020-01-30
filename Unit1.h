@@ -29,7 +29,6 @@ __published:	// IDE-managed Components
         TLabel *LabelBounces;
         TLabel *LabelLevel;
         TButton *ButtomNextLevel;
-        TMediaPlayer *MediaPlayer1;
         void __fastcall TimerBallTimer(TObject *Sender);
         void __fastcall paddleLeftUpTimer(TObject *Sender);
         void __fastcall paddleLeftDownTimer(TObject *Sender);
@@ -41,6 +40,8 @@ __published:	// IDE-managed Components
           TShiftState Shift);
         void __fastcall ButtomNewGameClick(TObject *Sender);
         void __fastcall ButtomNextLevelClick(TObject *Sender);
+        void __fastcall FormCreate(TObject *Sender);
+        void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 private:	// User declarations
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);

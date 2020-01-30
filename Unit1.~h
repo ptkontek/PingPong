@@ -9,6 +9,7 @@
 #include <Forms.hpp>
 #include <ExtCtrls.hpp>
 #include <Graphics.hpp>
+#include <MPlayer.hpp>
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
@@ -28,6 +29,7 @@ __published:	// IDE-managed Components
         TLabel *LabelBounces;
         TLabel *LabelLevel;
         TButton *ButtomNextLevel;
+        TMediaPlayer *MediaPlayer1;
         void __fastcall TimerBallTimer(TObject *Sender);
         void __fastcall paddleLeftUpTimer(TObject *Sender);
         void __fastcall paddleLeftDownTimer(TObject *Sender);
@@ -38,6 +40,7 @@ __published:	// IDE-managed Components
         void __fastcall FormKeyUp(TObject *Sender, WORD &Key,
           TShiftState Shift);
         void __fastcall ButtomNewGameClick(TObject *Sender);
+        void __fastcall ButtomNextLevelClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);
