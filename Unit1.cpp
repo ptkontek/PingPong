@@ -10,26 +10,45 @@
 #pragma resource "*.dfm"
 TForm1 *Form1;
 
-int x = 5; // pilka bedzie sie poruszac w lewo
-int y = 5;  // pilka bedzie sie poruszac w gore
+int x = 5; int y = 5;
 int bounces = 0; // ilosc odbic pi³ki
 int level = 1;
 int leftPlayerPoints = 0;
 int rightPlayerPoints = 0;
 AnsiString whichPlayer = "";
 
+void settingParameters(){
+
+        Form1->paddleLeft->Left = Form1->tlo->Left + 20;
+        Form1->paddleLeft->Top = Form1->tlo->Height/2 - Form1->paddleLeft->Height/2;
+        Form1->paddleRight->Left = Form1->tlo->Width - Form1->paddleRight->Width - 20;
+        Form1->paddleRight->Top = Form1->tlo->Height/2 - Form1->paddleRight->Height/2;
+
+        Form1->ball->Left = Form1->tlo->Width/2;
+        Form1->ball->Top = Form1->tlo->Height/2;
+
+        Form1->ButtomNewGame->Left = Form1->tlo->Width/2 - Form1->ButtomNewGame->Width/2;
+        Form1->ButtomNextLevel->Left = Form1->tlo->Width/2 -Form1->ButtomNextLevel->Width/2;
+        Form1->LabelBounces->Left = Form1->tlo->Width/2 -Form1->LabelBounces->Width/2;
+        Form1->LabelLevel->Left = Form1->tlo->Width/2 -Form1->LabelLevel->Width/2;
+        Form1->LabelPoints->Left = Form1->tlo->Width/2 -Form1->LabelPoints->Width/2;
+
+}
+
 void  whoWon() {
     if (whichPlayer == "left")
         {
                 Form1->LabelPoints->Visible = true;
-                Form1->LabelPoints->Caption = " < Punkt dla gracza lewego ";
+                Form1->LabelPoints->Caption = " < Punkt dla gracza lewego. Zaczyna gracz lewy. ";
+                x = 5; y = 5;
                 leftPlayerPoints++;
                 level++;
          }
         else if (whichPlayer == "right")
         {
                 Form1->LabelPoints->Visible = true;
-                Form1->LabelPoints->Caption = " Punkt dla gracza prawego > ";
+                Form1->LabelPoints->Caption = " Punkt dla gracza prawego. Zaczyna gracz prawy. > ";
+                x = -5; y = -5;
                 rightPlayerPoints++;
                 level++;
         }
@@ -37,10 +56,12 @@ void  whoWon() {
          Form1->LabelLevel->Visible = true;
          Form1->LabelLevel->Caption = IntToStr(leftPlayerPoints) + " : " + IntToStr(rightPlayerPoints);
          Form1->LabelBounces->Visible = true;
-        Form1-> LabelBounces->Caption = "Ilosc odbic: " + IntToStr(bounces);
-        Form1-> ButtomNextLevel->Visible = true;
-        Form1-> ButtomNewGame->Visible = true;
+         Form1-> LabelBounces->Caption = "Ilosc odbic: " + IntToStr(bounces);
+         Form1-> ButtomNextLevel->Visible = true;
+         Form1-> ButtomNewGame->Visible = true;
+
 }
+
 
 
 //---------------------------------------------------------------------------
@@ -52,10 +73,6 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 
 void __fastcall TForm1::TimerBallTimer(TObject *Sender)
 {
-
-  // if ( ball->Left + x > tlo->Left) x *= -1;
-  // if ( ball->Top +x > tlo->Top) x *= -1;
-
    ball->Left += x;   //przesuniêcie pi³ki
    ball->Top += y;
 
@@ -73,12 +90,14 @@ void __fastcall TForm1::TimerBallTimer(TObject *Sender)
         {
             TimerBall->Enabled = false;
             ball->Visible = false;
+            sndPlaySound("snd/koniec/wav",SND_ASUNC);
             whoWon();
         }
   // odbicie od lewej paletki
    else if (ball->Left <= paddleLeft->Left + paddleLeft->Width &&  ball->Top + ball->Height/2 <= paddleLeft->Top + paddleLeft->Height &&
            ball->Top + ball->Height/2 >= paddleLeft->Top)
         {
+          sndPlaySound("snd/odcibie/wav",SND_ASUNC);
           bounces++;
           whichPlayer = "left";
             //srodek paletki - pilka przyspiesza
@@ -93,6 +112,7 @@ void __fastcall TForm1::TimerBallTimer(TObject *Sender)
    else if (ball->Left + ball->Width >= paddleRight->Left  && ball->Top + ball->Height/2 <= paddleRight->Top + paddleRight->Height &&
            ball->Top + ball->Height/2 >= paddleRight->Top)
         {
+         sndPlaySound("snd/odcibie/wav",SND_ASUNC);
          bounces++;
          whichPlayer = "right";
                          //srodek paletki - pilka przyspiesza
@@ -145,6 +165,12 @@ void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
 //---------------------------------------------------------------------------
 void __fastcall TForm1::ButtomNewGameClick(TObject *Sender)
 {
+     settingParameters() ;
+     leftPlayerPoints = 0;
+     rightPlayerPoints = 0;
+     level = 1;
+     bounces = 0;
+
      TimerBall->Enabled = true;
      ball->Visible = true;
 
@@ -155,10 +181,30 @@ void __fastcall TForm1::ButtomNewGameClick(TObject *Sender)
      LabelBounces->Visible = false;
      LabelLevel->Visible = false;
 
-     ball->Left = tlo->Width/2;
-     ball->Top = tlo->Height/2;
+
 
 }
 //---------------------------------------------------------------------------
 
+
+void __fastcall TForm1::ButtomNextLevelClick(TObject *Sender)
+{
+     settingParameters();
+
+     if (whichPlayer == "left")        ball->Left = paddleLeft->Left + Form1->paddleLeft->Width;
+     else if (whichPlayer == "right")  ball->Left = paddleRight->Left - Form1->ball->Width;
+
+     TimerBall->Enabled = true;
+     ball->Visible = true;
+
+     Start->Visible = false;
+     ButtomNewGame->Visible = false;
+     ButtomNextLevel->Visible = false;
+     LabelPoints->Visible = false;
+     LabelBounces->Visible = false;
+     LabelLevel->Visible = false;
+
+
+}
+//---------------------------------------------------------------------------
 

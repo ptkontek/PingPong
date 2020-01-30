@@ -1,9 +1,9 @@
 object Form1: TForm1
-  Left = 246
-  Top = 121
+  Left = 202
+  Top = 137
   Width = 928
-  Height = 486
-  Caption = 'Form1'
+  Height = 484
+  Caption = 'PingPong by Patrycja'
   Color = clBtnFace
   UseDockManager = True
   DockSite = True
@@ -17,21 +17,21 @@ object Form1: TForm1
   OnKeyUp = FormKeyUp
   DesignSize = (
     912
-    448)
+    446)
   PixelsPerInch = 96
   TextHeight = 13
   object tlo: TShape
     Left = 0
     Top = 0
     Width = 912
-    Height = 448
+    Height = 446
     Align = alClient
     Brush.Color = clGray
   end
   object LabelBounces: TLabel
     Left = 304
     Top = 180
-    Width = 297
+    Width = 289
     Height = 45
     Alignment = taCenter
     AutoSize = False
@@ -52,7 +52,6 @@ object Form1: TForm1
     Height = 32
     Anchors = [akLeft, akTop, akRight, akBottom]
     AutoSize = True
-    Center = True
     Picture.Data = {
       07544269746D6170360C0000424D360C00000000000036000000280000002000
       0000200000000100180000000000000C0000220B0000220B0000000000000000
@@ -792,7 +791,7 @@ object Form1: TForm1
   end
   object Start: TLabel
     Left = 256
-    Top = 16
+    Top = 112
     Width = 404
     Height = 51
     Caption = 'Zagrajmy w PingPonga!'
@@ -805,10 +804,10 @@ object Form1: TForm1
     Transparent = True
   end
   object LabelPoints: TLabel
-    Left = 304
-    Top = 84
-    Width = 297
-    Height = 45
+    Left = 128
+    Top = 80
+    Width = 689
+    Height = 49
     Alignment = taCenter
     AutoSize = False
     Color = clBtnFace
@@ -824,7 +823,7 @@ object Form1: TForm1
   object LabelLevel: TLabel
     Left = 304
     Top = 132
-    Width = 297
+    Width = 289
     Height = 45
     Alignment = taCenter
     AutoSize = False
@@ -868,6 +867,15 @@ object Form1: TForm1
     Font.Style = []
     ParentFont = False
     TabOrder = 1
+    Visible = False
+    OnClick = ButtomNextLevelClick
+  end
+  object MediaPlayer1: TMediaPlayer
+    Left = 160
+    Top = 400
+    Width = 253
+    Height = 30
+    TabOrder = 2
   end
   object TimerBall: TTimer
     Enabled = False
